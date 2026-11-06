@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apisul · Backlog e Melhorias</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- CONTAINER DE NOTIFICAÇÕES TOAST -->
+<div id="toast-container"></div>
+
+<!-- MODAL DE SENHA -->
+<div id="auth-modal" class="modal-overlay">
+  <div class="modal-card">
+    <h2>Autenticação Necessária</h2>
+    <p>Insira a chave de acesso (API Key) para conectar ao painel e gerenciar as atividades:</p>
+    <input type="password" id="api-key-input" placeholder="Cole sua API Key aqui..." autocomplete="off">
+    <button id="auth-btn">Conectar</button>
+  </div>
+</div>
+
+<!-- MODAL DE DETALHES / EDIÇÃO DE CARD -->
+<div id="card-modal" class="modal-overlay" style="display:none;">
+  <div class="modal-card" style="max-width: 550px;">
+    <h2>Detalhes da Atividade</h2>
+    <div id="card-form-content"></div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button id="save-card-btn" style="flex:1; background:var(--ink); color:var(--bg);">Salvar Alterações</button>
+      <button id="del-card-btn" style="background:#C0341D; color:#fff; border:none;">Excluir Tarefa</button>
+      <button id="close-card-btn" class="btn-sec">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE GERENCIAR ETAPAS (COLUNAS DO KANBAN) -->
+<div id="stage-modal" class="modal-overlay" style="display:none;">
+  <div class="modal-card" style="max-width: 480px;">
+    <h2>Gerenciar Etapas do Kanban</h2>
+    <p style="font-size:12px; margin-bottom:12px;">Adicione, remova ou reordene as colunas do fluxo:</p>
+    <div id="stage-list-view" style="margin-bottom:15px; display:flex; flex-direction:column; gap:6px; max-height:250px; overflow-y:auto;"></div>
+    <div style="display:flex; gap:6px; margin-bottom:14px;">
+      <input type="text" id="new-stage-input" placeholder="Nome da nova etapa..." style="flex:1; padding:8px; border-radius:6px; border:1px solid var(--line); background:var(--bg); color:var(--ink);">
+      <button id="add-stage-btn" style="background:var(--ink); color:var(--bg);">Adicionar</button>
+    </div>
+    <div style="display:flex; justify-content:flex-end;">
+      <button id="close-stage-btn" class="btn-sec">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div>
+    <h1>Backlog e Melhorias da Integração</h1>
+    <div class="sub">Integração eCargo ↔ Apisul, mediada pelo Hub</div>
+  </div>
+  <div class="link"><span class="pill e">eCargo</span><span class="wire"></span><span class="pill h">Hub</span><span class="wire"></span><span class="pill a">Apisul</span></div>
+</header>
+<main>
+  <section class="kpis" id="kpis"></section>
+  <section class="flow" id="flow" aria-label="Atividades por etapa"></section>
+  <div class="bar">
+    <input id="q" type="search" placeholder="Buscar por código ou título" aria-label="Buscar">
+    <div id="filters" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    <span class="sep"></span>
+    <button id="vk" class="on">Quadro</button><button id="vl">Lista</button>
+    <button id="open-stage-modal" title="Gerenciar etapas">⚙️ Gerenciar Etapas</button>
+    <button id="new-task-btn" title="Criar nova tarefa">➕ Nova Tarefa</button>
+  </div>
+  <div id="view"></div>
+</main>
+<footer>Modo de visualização seguro com autenticação por sessão.</footer>
+<script src="script.js"></script>
+</body>
+</html>
