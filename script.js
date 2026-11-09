@@ -182,11 +182,19 @@ function render(){
   var pctApisul = Math.round((countApisul / n) * 100);
   var pctECargo = Math.round((countECargo / n) * 100);
 
-  var kpisHtml = [
+  // Dividindo os KPIs com rótulos de categoria para evitar confusão de soma
+  var kpisHtml = `
+    <div style="width:100%; font-size:12px; font-weight:bold; color:var(--mut); margin-bottom:-4px; margin-top:4px; text-transform:uppercase; letter-spacing:0.5px;">Visão Geral e Status do Fluxo</div>
+  ` + [
     [DB.tasks.length, "atividades no plano", ""],
     [pctProd + "%", "concluídas ("+prod+"/"+DB.tasks.length+")", "Status Final"],
     [pctDev + "%", "em andamento ("+dev+"/"+DB.tasks.length+")", "Em progresso"],
-    [pctBk + "%", "aguardando ("+bk+"/"+DB.tasks.length+")", "Fila inicial"],
+    [pctBk + "%", "aguardando ("+bk+"/"+DB.tasks.length+")", "Fila inicial"]
+  ].map(function(k){ 
+    return '<div class="kpi"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>'; 
+  }).join("") + `
+    <div style="width:100%; font-size:12px; font-weight:bold; color:var(--mut); margin-bottom:-4px; margin-top:8px; text-transform:uppercase; letter-spacing:0.5px;">Distribuição por Sistema</div>
+  ` + [
     [pctHub + "%", "Hub ("+countHub+" tarefas)", "Por sistema"],
     [pctApisul + "%", "Apisul ("+countApisul+" tarefas)", "Por sistema"],
     [pctECargo + "%", "eCargo ("+countECargo+" tarefas)", "Por sistema"]
