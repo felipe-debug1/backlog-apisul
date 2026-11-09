@@ -139,14 +139,11 @@ function card(x){
   
   var todayStr = new Date().toISOString().split("T")[0];
   
-  // Validação Homologação: Fica em vermelho se a data estimada já passou (menor que hoje) 
-  // e a tarefa ainda não chegou na etapa de Homologação (índice < 3)[cite: 1]
   var hLate = false;
   if(x.h && x.s < 3 && x.h < todayStr) {
     hLate = true;
   }
   
-  // Validação Produção/Fim: se a data efetiva (ini) é maior que a estimativa de produção (p)
   var pLate = false;
   if(x.ini && x.p && x.ini > x.p) {
     pLate = true;
@@ -182,19 +179,16 @@ function render(){
   var pctApisul = Math.round((countApisul / n) * 100);
   var pctECargo = Math.round((countECargo / n) * 100);
 
-  // Dividindo os KPIs com rótulos de categoria para evitar confusão de soma
-  var kpisHtml = `
-    <div style="width:100%; font-size:12px; font-weight:bold; color:var(--mut); margin-bottom:-4px; margin-top:4px; text-transform:uppercase; letter-spacing:0.5px;">Visão Geral e Status do Fluxo</div>
-  ` + [
+  var kpisStatusHtml = [
     [DB.tasks.length, "atividades no plano", ""],
     [pctProd + "%", "concluídas ("+prod+"/"+DB.tasks.length+")", "Status Final"],
     [pctDev + "%", "em andamento ("+dev+"/"+DB.tasks.length+")", "Em progresso"],
     [pctBk + "%", "aguardando ("+bk+"/"+DB.tasks.length+")", "Fila inicial"]
   ].map(function(k){ 
     return '<div class="kpi"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>'; 
-  }).join("") + `
-    <div style="width:100%; font-size:12px; font-weight:bold; color:var(--mut); margin-bottom:-4px; margin-top:8px; text-transform:uppercase; letter-spacing:0.5px;">Distribuição por Sistema</div>
-  ` + [
+  }).join("");
+
+  var kpisSysHtml = [
     [pctHub + "%", "Hub ("+countHub+" tarefas)", "Por sistema"],
     [pctApisul + "%", "Apisul ("+countApisul+" tarefas)", "Por sistema"],
     [pctECargo + "%", "eCargo ("+countECargo+" tarefas)", "Por sistema"]
@@ -202,7 +196,18 @@ function render(){
     return '<div class="kpi"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>'; 
   }).join("");
 
-  document.getElementById("kpis").innerHTML = kpisHtml;
+  document.getElementById("kpis").innerHTML = `
+    <div style="width:100%; display:flex; flex-direction:column; gap:12px;">
+      <div>
+        <div style="font-size:11px; font-weight:bold; color:var(--mut); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Visão Geral e Status do Fluxo</div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">${kpisStatusHtml}</div>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:bold; color:var(--mut); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px; margin-top:6px;">Distribuição por Sistema</div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">${kpisSysHtml}</div>
+      </div>
+    </div>
+  `;
   
   document.getElementById("flow").innerHTML = DB.stages.map(function(s,i){ 
     var c = DB.tasks.filter(function(x){ return x.s===i; }).length; 
